@@ -1,0 +1,8 @@
+*.pyc
+*.sqlite
+.idea
+.coverage
+.vagrant
+ansible/*.retry
+/glucosetracker/media/
+vagrant_ansible_inventory_default

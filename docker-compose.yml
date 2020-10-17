@@ -1,0 +1,27 @@
+postgresql:
+  image: jcalazan/postgresql
+  environment:
+    - POSTGRESQL_DB=glucosetracker
+    - POSTGRESQL_USER=glucosetracker
+    - POSTGRESQL_PASSWORD=password
+  volumes:
+    - ~/dockerfiles/glucose-tracker/postgresql:/var/lib/postgresql
+  ports:
+    - "5432:5432"
+
+django:
+  image: jcalazan/django
+  environment:
+    - DJANGO_SETTINGS_MODULE=settings.local
+    - POSTGRESQL_HOST=postgresql
+  working_dir: /glucose-tracker
+  command: >
+    bash -c "sleep 2 && cd glucosetracker && python manage.py runserver 0.0.0.0:80"
+  volumes:
+    - .:/glucose-tracker
+    - ~/dockerfiles/glucose-tracker/python:/usr/local/lib/python2.7
+    - ~/dockerfiles/glucose-tracker/bin:/usr/local/bin
+  ports:
+    - "80:80"
+  links:
+    - postgresql
