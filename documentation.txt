@@ -1,0 +1,42 @@
+virtualenv telelbirds
+cd ~/venv/telel-poultry/ && . bin/activate && cd ~/projects/telel/telelbirds
+pip3 install Django #3.1.2
+django-admin startproject telelbirds
+
+python manage.py startapp
+(telel-poultry) (base) ngeno@ngeno:~/projects/telel/telelbirds$ python manage.py startapp hatchery
+(telel-poultry) (base) ngeno@ngeno:~/projects/telel/telelbirds$ python manage.py startapp chicks
+(telel-poultry) (base) ngeno@ngeno:~/projects/telel/telelbirds$ python manage.py startapp feeds
+(telel-poultry) (base) ngeno@ngeno:~/projects/telel/telelbirds$ python manage.py startapp analytics
+(telel-poultry) (base) ngeno@ngeno:~/projects/telel/telelbirds$ python manage.py startapp dashboard
+(telel-poultry) (base) ngeno@ngeno:~/projects/telel/telelbirds$ python manage.py startapp medications
+(telel-poultry) (base) ngeno@ngeno:~/projects/telel/telelbirds$ python manage.py startapp finance
+(telel-poultry) (base) ngeno@ngeno:~/projects/telel/telelbirds$ python manage.py startapp reports
+(telel-poultry) (base) ngeno@ngeno:~/projects/telel/telelbirds$ python manage.py startapp customer
+(telel-poultry) (base) ngeno@ngeno:~/projects/telel/telelbirds$ python manage.py startapp layers
+(telel-poultry) (base) ngeno@ngeno:~/projects/telel/telelbirds$ python manage.py startapp exotics
+(telel-poultry) (base) ngeno@ngeno:~/projects/telel/telelbirds$ python manage.py startapp payments
+(telel-poultry) (base) ngeno@ngeno:~/projects/telel/telelbirds$ python manage.py startapp breeders
+(telel-poultry) (base) ngeno@ngeno:~/projects/telel/telelbirds$ python manage.py startapp delivery
+(telel-poultry) (base) ngeno@ngeno:~/projects/telel/telelbirds$ python manage.py startapp search
+(telel-poultry) (base) ngeno@ngeno:~/projects/telel/telelbirds$ python manage.py startapp spatial
+
+
+github account 
+https://github.com/kngeno/telelbirds.git
+…or create a new repository on the command line
+
+echo "# telelbirds" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/kngeno/telelbirds.git
+git push -u origin main
+                
+
+…or push an existing repository from the command line
+
+git remote add origin https://github.com/kngeno/telelbirds.git
+git branch -M main
+git push -u origin main
