@@ -42,11 +42,6 @@ git branch -M main
 git push -u origin main
 
 
-EAC Directory
-telelbirds.com : pW4@TeleL
-telelfarm@gmail.com : Ngeno123
-Digital Ocean: pw4Ngeno
-
 def save(self, *args, **kwargs):
     self.full_name = self.first_name + " " + self.last_name
     super(Author, self).save(*args, **kwargs)
