@@ -5,7 +5,7 @@ Poultry Farm Management System: TelelBirds
 
 A web-based application and platform for keeping track of the entire production system of a Poultry farm,from breeding, egg production, hatchery to chicks management. Written in Python using the Django framework.
 
-<b>Main Site:</b> https://www.telelbirds.com 
+<b>Main Site:</b> https://www.telelbirds.com - HATCHING SOON!
 
 <b>Features:</b>
 
@@ -38,12 +38,12 @@ A web-based application and platform for keeping track of the entire production 
 Installation/Running the App
 ----------------------------
 
-1. Install the required libraries listed in the requirements file with pip: pip install -r requirements.txt
+1. Install the required libraries listed in the requirements file with pip: *pip install -r requirements.txt*
 2. If you just want to run a demo of the app, use the <b>local_demo.py</b> file which uses an SQLite database and will be created automatically. Otherwise, for development, please use PostgreSQL and the local_settings.py file.  Set the database settings and environment variables accordingly.
-3. Run the syncdb command: e.g. python manage.py syncdb --noinput --settings=settings.local_demo
-4. Run the South migration: e.g. python manage.py migrate --settings=settings.local_demo
-5. (Optional) Populate your database with dummy data: e.g. python manage.py load_random_glucose_data jsmith --settings=settings.local_demo (note that 'telelbirds' can be changed to any username you like, the password will always be 'demo').
-6. Run the local web server: e.g. python manage.py runserver --settings=settings.local_demo
+3. Run the makemigration command: e.g. *python manage.py makemigration --noinput --settings=settings.local_demo*
+4. Run the migration: e.g. *python manage.py migrate --settings=settings.local_demo*
+5. (Optional) Populate your database with dummy data: e.g. *python manage.py load_random_breed_data admin --settings=settings.local_demo* (note that 'telelbirds' can be changed to any username you like, the password will always be 'demo').
+6. Run the local web server: e.g. *python manage.py runserver --settings=settings.local_demo*
 
 3rd-Party Apps/Libraries/Plugins
 --------------------------------
@@ -57,4 +57,4 @@ TelelBirds uses the following:
 * Django Compressor (http://django-compressor.readthedocs.org/en/latest/)
 * Bootstrap DateTimePicker (http://eonasdan.github.io/bootstrap-datetimepicker/)
 * Datatables (http://datatables.net)
-* Highcharts (http://www.highcharts.com/)
+* Highcharts (http://www.highcharts.com/)/ AMCHARTS

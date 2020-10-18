@@ -77,7 +77,7 @@ class Breeders(models.Model):
         managed = True
 
     def save(self, *args, **kwargs):
-        self.current_number = self.cocks + self.hens - self.butchered - self.sold
+        self.current_number = self.cocks + self.hens - self.butchered - self.sold - self.mortality
         super(Breeders, self).save(*args, **kwargs)
     
     def get_absolute_url(self):
