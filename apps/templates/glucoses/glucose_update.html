@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block heading %}
+    <h3><span class="fa fa-pencil"></span> Edit Glucose</h3>
+{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+   {% crispy form %}
+{% endblock %}
+
+{% block extrajs %}
+<script type="text/javascript">
+$(function () {
+    $('#id_record_date').datetimepicker({
+        pickTime: false
+    });
+});
+</script>
+{% endblock %}

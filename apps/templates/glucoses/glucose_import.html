@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block heading %}
+<h3>
+    <span class="fa fa-upload"></span> Import Data from CSV
+    <small>
+        <a href="{% url 'help' %}">Help</a>
+    </small>
+</h3>
+{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+  <h3>Instructions</h3>
+  <p>
+    To properly import your data, the CSV file must follow
+    this order and format:
+    <ol>
+    <li>Value</li>
+    <li>Category (if no matching category in our system,
+    'No Category' will be assigned)</li>
+    <li>Date (in m/d/yyyy format, e.g. 5/6/2014 or
+    05/06/2014)</li>
+    <li> Time (in h:m am/pm format, e.g. 8:01 AM or 08:01 PM)</li>
+    <li>Notes</li>
+    </ol>
+    You can also download this template as a guide:
+    <a href="{% static 'samples/csv_import_template.csv' %}">csv_import_template.csv</a>
+  </p>
+ {% crispy form %}
+</div>
+{% endblock %}

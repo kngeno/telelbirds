@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,6 +25,11 @@ SECRET_KEY = 'bzb(%44=gi!3@3+6e^a1d8b-#6jak=fd@kj^@lpekyrrql(7@4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+SITE_ID = 1
+
+# Run management command 'set_site_values to set these values
+SITE_NAME = 'TelelBirds'
+SITE_DOMAIN = 'telelbirds.com'
 ALLOWED_HOSTS = []
 
 
@@ -37,6 +42,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'imagekit',
+
+    'apps.breeders',
+    'apps.chicks',
+    'apps.customer',
+    'apps.hatchery',
+    
 ]
 
 MIDDLEWARE = [
@@ -75,7 +88,7 @@ WSGI_APPLICATION = 'telelbirds.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.contrib.gis.db.backends.spatialite',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }

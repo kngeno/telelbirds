@@ -1,0 +1,39 @@
+{% extends 'blogs/blog_base.html' %}
+
+{% block title %}Blog Posts | {{ site_name }}{% endblock %}
+
+{% block heading %}
+    <h3>
+        <span class="fa fa-list-alt"></span> Blog Posts
+        {% if user.is_superuser %} <small><a href="{% url 'admin:blogs_blog_add' %}"><u>Add</u></a></small>{% endif %}
+    </h3>
+{% endblock %}
+
+{% block content %}
+    {% if blog_list %}
+        {% for blog in blog_list %}
+            <h4><a href="{% url 'blog_detail_view' blog.slug %}">{{ blog.title }}</a></h4>
+            <span class="text-muted">{% if blog.is_published %}<span class="fa fa-calendar"></span> {{ blog.date_published|date:'F j, Y' }}{% else %}{{ blog.status|capfirst }}{% endif %} by {{ blog.author.get_full_name }}</span>
+            {% if user.is_superuser %} <a href="{% url 'admin:blogs_blog_change' blog.id %}"><u>Edit</u></a>{% endif %}
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p class="lead">Nothing here at the moment, but please check back later!</p>
+    {% endif %}
+
+    {% if is_paginated %}
+    <div class="row text-center">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+              <li><a href="{% url 'blog_list_view'%}?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+            {% endif %}
+            {% for page_number in page_obj.paginator.page_range %}
+              <li class={% if page_number == page_obj.number %}"active"{% else %}""{% endif %}><a href="{% url 'blog_list_view'%}?page={{ page_number }}">{{ page_number }}</a></li>
+            {% endfor %}
+            {% if page_obj.has_next %}
+              <li><a href="{% url 'blog_list_view'%}?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+            {% endif %}
+        </ul>
+    </div>
+    {% endif %}
+{% endblock %}

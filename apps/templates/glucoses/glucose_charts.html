@@ -1,0 +1,306 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block heading %}
+<h3>
+    <span class="fa fa-bar-chart"></span> Charts & Graphs
+    <small>
+        <a href="{% url 'glucose_filter' %}">Filter Data</a>
+        | <a href="{% url 'glucose_email_report' %}">Email Report</a>
+    </small>
+</h3>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class ="col-sm-6 col-md-6">
+            <div id="accordion3" class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-target="#collapseBody3">
+                        Glucose Level Breakdown
+                        <span class="fa fa-chevron-up pull-right"></span>
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseBody3" class="panel-collapse collapse in">
+                <div class="row">
+                    <div class="col-sm-4 col-md-4">
+                        <select id="levelBreakdownSelect" class="form-control input-sm">
+                            <option value=7>Last 7 Days</option>
+                            <option value=14>Last 14 Days</option>
+                            <option value=30>Last 30 Days</option>
+                            <option value=90>Last 90 Days</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="levelBreakdownPanel" class="panel-body"></div>
+            </div>
+            </div>
+        </div>
+
+        <div class ="col-sm-6 col-md-6">
+            <div id="accordion4" class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-target="#collapseBody4">
+                        Category Breakdown
+                        <span class="fa fa-chevron-up pull-right"></span>
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseBody4" class="panel-collapse collapse in">
+                <div class="row">
+                    <div class="col-sm-4 col-md-4">
+                        <select id="countByCategorySelect" class="form-control input-sm">
+                            <option value=7>Last 7 Days</option>
+                            <option value=14>Last 14 Days</option>
+                            <option value=30>Last 30 Days</option>
+                            <option value=90>Last 90 Days</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="countByCategoryPanel" class="panel-body">
+                </div>
+            </div>
+            </div>
+        </div>
+    </div> <!-- end row -->
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class ="col-sm-6 col-md-6">
+            <div id="accordion2" class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-target="#collapseBody2">
+                        Average Glucose by Day
+                        </span><span class="fa fa-chevron-up pull-right"></span>
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseBody2" class="panel-collapse collapse in">
+                <div class="row">
+                    <div class="col-sm-4 col-md-4">
+                        <select id="avgByDaySelect" class="form-control input-sm">
+                            <option value=7>Last 7 Days</option>
+                            <option value=14>Last 14 Days</option>
+                            <option value=30>Last 30 Days</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="avgByDayPanel" class="panel-body"></div>
+            </div>
+            </div>
+        </div>
+
+        <div class ="col-sm-6 col-md-6">
+            <div id="accordion1" class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="accordion-toggle" data-toggle="collapse" data-target="#collapseBody1">
+                        Average Glucose by Category
+                        <span class="fa fa-chevron-up pull-right"></span>
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseBody1" class="panel-collapse collapse in">
+                <div class="row">
+                    <div class="col-sm-4 col-md-4">
+                        <select id="avgByCategorySelect" class="form-control input-sm">
+                            <option value=7>Last 7 Days</option>
+                            <option value=14>Last 14 Days</option>
+                            <option value=30>Last 30 Days</option>
+                            <option value=90>Last 90 Days</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="avgByCategoryPanel" class="panel-body"></div>
+            </div>
+            </div>
+        </div>
+    </div> <!-- end row -->
+</div>
+{% endblock %}
+
+{% block extrajs %}
+<script src="{% static 'highcharts/js/highcharts.js' %}"></script>
+<script src="{% static 'highcharts/js/modules/exporting.js' %}"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    // For changing the icon in the Options panel
+    $('.collapse').on('shown.bs.collapse', function(){
+        $(this).parent().find(".fa-chevron-down")
+            .removeClass("fa-chevron-down")
+            .addClass("fa-chevron-up");
+    }).on('hidden.bs.collapse', function(){
+        $(this).parent().find(".fa-chevron-up")
+            .removeClass("fa-chevron-up")
+            .addClass("fa-chevron-down");
+    });
+
+
+    var jsonUrl = '{% url 'chart_data_json' %}'
+
+    // Glucose Average by Category
+    var avgByCategoryOptions = {
+        credits: {
+            enabled: false
+        },
+        chart: {
+            renderTo: 'avgByCategoryPanel',
+            type: 'column'
+        },
+        legend: {enabled: false},
+        title: {text: null},
+        xAxis: {},
+        yAxis: {title: {text: null}},
+        series: [{}],
+    };
+
+    function loadAvgByCategory(path){
+        $.getJSON(path,
+            function(data) {
+                avgByCategoryOptions.xAxis.categories = data['chart_data']['categories'];
+                avgByCategoryOptions.series[0].name = 'Avg Glucose ({{ user.settings.glucose_unit }})';
+                avgByCategoryOptions.series[0].data = data['chart_data']['values'];
+                var chart = new Highcharts.Chart(avgByCategoryOptions);
+        });
+    }
+
+    $('#avgByCategorySelect').change(function(){
+        var days = $('#avgByCategorySelect').val();
+        var path = jsonUrl + '?name=avg_by_category&days=' + days;
+        loadAvgByCategory(path);
+    });
+    
+
+    // Glucose Average by Day
+     var avgByDayOptions = {
+        credits: {
+            enabled: false
+        },
+        chart: {
+            renderTo: 'avgByDayPanel',
+            type: 'line',
+        },
+        legend: {enabled: false},
+        title: {text: null},
+        xAxis: {labels: {rotation: -45}},
+        yAxis: {title: {text: null}},
+        series: [{}],
+    };
+
+    function loadAvgByDay(path){
+        $.getJSON(path,
+            function(data) {
+                avgByDayOptions.xAxis.categories = data['chart_data']['dates'];
+                avgByDayOptions.series[0].name = 'Avg Glucose ({{ user.settings.glucose_unit }})';
+                avgByDayOptions.series[0].data = data['chart_data']['values'];
+                var chart = new Highcharts.Chart(avgByDayOptions);
+        });
+    }
+
+    $('#avgByDaySelect').change(function(){
+        var days = $('#avgByDaySelect').val();
+        var path = jsonUrl + '?name=avg_by_day&days=' + days;
+        loadAvgByDay(path);
+    });
+
+
+    // Glucose Levels Breakdown
+    var levelBreakdownOptions = {
+        credits: {
+            enabled: false
+        },
+        chart: {
+            renderTo: 'levelBreakdownPanel',
+        },
+        title: {text: null},
+        series: [{type: 'pie', name: 'Glucose Count'}],
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    color: '#000000',
+                    connectorColor: '#000000',
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                },
+                showInLegend: true
+            }
+        },
+    };
+    
+    function loadLevelBreakdown(path){
+        $.getJSON(path,
+            function(data) {
+                levelBreakdownOptions.series[0].data = data['chart_data'];
+                var chart = new Highcharts.Chart(levelBreakdownOptions);
+        });
+    }
+    
+    $('#levelBreakdownSelect').change(function(){
+        var days = $('#levelBreakdownSelect').val();
+        var path = jsonUrl + '?name=level_breakdown&days=' + days;
+        loadLevelBreakdown(path);
+    });
+
+
+    // Category Breakdown
+     var countByCategoryOptions = {
+        credits: {
+            enabled: false
+        },
+        chart: {
+            renderTo: 'countByCategoryPanel',
+        },
+        title: {text: null},
+        series: [{type: 'pie', name: 'Glucose Count'}],
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    color: '#000000',
+                    connectorColor: '#000000',
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                },
+                showInLegend: true
+            }
+        },
+    };
+
+    function loadCountByCategory(path){
+        $.getJSON(path,
+            function(data) {
+                countByCategoryOptions.series[0].innerSize = '40%';
+                countByCategoryOptions.series[0].data = data['chart_data'];
+                var chart = new Highcharts.Chart(countByCategoryOptions);
+        });
+    }
+
+    $('#countByCategorySelect').change(function(){
+        var days = $('#countByCategorySelect').val();
+        var path = jsonUrl + '?name=count_by_category&days=' + days;
+        loadCountByCategory(path);
+    });
+
+
+    // Initial loading of the charts
+    loadAvgByCategory(jsonUrl  + '?name=avg_by_category&days='
+        + $('#avgByCategorySelect').val());
+    loadAvgByDay(jsonUrl + '?name=avg_by_day&days='
+        + $('#avgByDaySelect').val());
+    loadLevelBreakdown(jsonUrl + '?name=level_breakdown&days='
+        + $('#levelBreakdownSelect').val());
+    loadCountByCategory(jsonUrl + '?name=count_by_category&days='
+        + $('#countByCategorySelect').val());
+});
+</script>
+{% endblock %}

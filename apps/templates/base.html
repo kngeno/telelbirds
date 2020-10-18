@@ -1,0 +1,194 @@
+{% load staticfiles %}
+    
+{% load compress %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title>{% block title %}Simple Glucose Management App | {{ site_name }}{% endblock %}</title>
+        <meta name="description" content="GlucoseTracker is a simple and easy to use web application for keeping track of
+        your blood glucose levels. It's completely free with no ads. Modern look and mobile friendly!">
+
+        <!-- CSS -->
+        {% compress css %}
+        <link href="{% static 'bootstrap/css/bootstrap.css' %}" rel="stylesheet">
+        <link href="{% static 'bootstrap/css/bootstrap-theme.css' %}" rel="stylesheet">
+        <link href="{% static 'bootstrap/css/sticky-footer-navbar.css' %}" rel="stylesheet">
+        <link href="{% static 'datetimepicker/css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet">
+        <link href="{% static 'font-awesome/css/font-awesome.css' %}" rel="stylesheet">
+
+        {% block extracss %}{% endblock %}
+        {% endcompress %}
+
+        <!-- Add custom CSS here -->
+        {% block customcss %}
+            <style>
+                body {padding-bottom: 40px;}
+            </style>
+        {% endblock %}
+
+        <!-- RSS Feed -->
+        <link rel="alternate" type="application/rss+xml" title="RSS Feed for {{ site_name }}" href="{% url 'rss_feed' %}" />
+
+        <!-- Enables 'Add to Homescreen' for Android -->
+        <meta name="viewport" content="width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <link rel="icon" sizes="192x192" href="{% static 'images/icons/icon_blood_red_192x192.png' %}">
+
+        {% block extrahead %}{% endblock %}
+    </head>
+
+    <body>
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                {% if user.is_authenticated %}
+                <a class="navbar-brand" href="{% url 'dashboard' %}">
+                  <span class="fa fa-tint"></span> GlucoseTracker</a>
+                {% else %}
+                <a class="navbar-brand" href="/">
+                  <span class="fa fa-tint"></span> GlucoseTracker</a>
+                {% endif %}
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+              <ul class="nav navbar-nav navbar-right">
+                  {% if user.is_authenticated %}
+                    <li><a href="{% url 'glucose_create' %}">
+                        <span class="fa fa-plus"></span>&nbsp;New Glucose</a>
+                    </li>
+
+                    <li><a href="{% url 'dashboard' %}">
+                        <span class="fa fa-th"></span>&nbsp;Dashboard</a>
+                    </li>
+
+                    <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                         <span class="fa fa-bar-chart"></span>&nbsp;Reports <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="{% url 'glucose_filter' %}">Filter Data</a></li>
+                      <li><a href="{% url 'glucose_charts' %}">Charts & Graphs</a></li>
+                      <li class="divider"></li>
+                      <li><a href="{% url 'glucose_email_report' %}">Email Report</a></li>
+                    </ul>
+                    </li>
+
+                    <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <span class="fa fa-user"></span>&nbsp;
+                        {{ user }} <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="{% url 'usersettings' %}">Account Settings</a></li>
+                      <li><a href="{% url 'password_change' %}">Change Password</a></li>
+                      <li class="divider"></li>
+                      <li><a href="{% url 'glucose_import' %}">Import Data from CSV</a></li>
+                      <li class="divider"></li>
+                      <li><a href="{% url 'help' %}">Help</a></li>
+                      <li class="divider"></li>
+                      <li><a href="{% url 'logout' %}">Log Out</a></li>
+                    </ul>
+                    </li>
+                  {% else %}
+                    <form class="navbar-form navbar-right">
+                    <button type="button" class="btn btn-primary"
+                        onclick="location.href=&quot;{% url 'login' %}&quot;;">
+                        Log In</button>
+                    <button type="button" class="btn btn-success"
+                        onclick="location.href=&quot;{% url 'signup' %}&quot;;">
+                        Sign Up (Free!)</button>
+                    </form>
+                  {% endif %}
+              </ul>
+            </div><!-- /.navbar-collapse -->
+          </div><!-- /.container -->
+        </nav>
+
+        {% block rootcontainer %}
+        <div class="container">
+          <div class="row">
+            {% block breadcrumbs %}{% endblock %}
+            <div class="col-lg-12">
+                <div class="page-header">
+                    {% block heading %}{% endblock %}
+                </div>
+                {% block content %}{% endblock %}
+            </div>
+          </div>
+        </div><!-- /.container -->
+        {% endblock %}
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <div class="container">
+                <footer>
+                  <p class="pull-right"><a href="#">Back to top</a></p>
+                  <p class="text-muted">
+                      &copy; 2014-{% now 'Y' %} GlucoseTracker.net by <a href="http://www.calazan.com">Jonathan Calazan</a>
+                      | <a href="{% url 'blog_list_view' %}">Blog</a>
+                      | <a href="https://www.facebook.com/glucose.tracker/info">About</a>
+                      | <a href="mailto:info@glucosetracker.net">Contact Us</a>
+                  </p>
+                </footer>
+            </div>
+        </div>
+
+        <!-- JavaScript -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        {% compress js %}
+        <script src="{% static 'jquery/jquery.min.js' %}"></script>
+        <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'momentjs/moment.min.js' %}"></script>
+        <script src="{% static 'datetimepicker/js/bootstrap-datetimepicker.min.js' %}"></script>
+        <script src="{% static 'jquery-validation/jquery.validate.js' %}"></script>
+        {% block extrajs %}{% endblock %}
+        {% endcompress %}
+
+        {% if google_analytics_tracking_id %}
+        <!-- Asynchronous Google Analytics snippet. mathiasbynens.be/notes/async-analytics-snippet -->
+        <script>
+            var _gaq=[['_setAccount','{{ google_analytics_tracking_id }}'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+        {% endif %}
+
+        {% if intercom_app_id %}
+        <!-- Intercom.io script for user tracking. -->
+        <script id="IntercomSettingsScriptTag">
+          window.intercomSettings = {
+            name: "{{ user }}",
+            email: "{{ user.email }}",
+            created_at: {{ user.date_joined|date:'U' }},
+            app_id: "{{ intercom_app_id }}"
+          };
+        </script>
+        <script>(function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://static.intercomcdn.com/intercom.v1.js';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})()</script>
+        {% endif %}
+
+        <!-- Disable submit buttons after click to prevent multiple submissions. -->
+        <script type="text/javascript">
+            $(function () {
+                $('form').submit(function(){
+                    $(this).find('input[type=submit]').prop('disabled', true);
+                });
+            });
+        </script>
+
+       {% block extrajsexternal %}{% endblock %}
+    </body>
+</html>

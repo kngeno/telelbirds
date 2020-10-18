@@ -1,0 +1,62 @@
+{% extends 'blogs/blog_base.html' %}
+
+{% block title %}{{ blog.title }} | {{ site_name }}{% endblock %}
+
+{% block heading %}
+    <h2>{{ blog.title }}</h2>
+    <small>
+      <span class="text-muted">{% if blog.is_published %}<span class="fa fa-calendar"></span> {{ blog.date_published|date:'F j, Y' }}{% else %}{{ blog.status|capfirst }}{% endif %} by {{ blog.author.get_full_name }}</span>
+      {% if user.is_superuser %} <a href="{% url 'admin:blogs_blog_change' blog.id %}"><u>Edit</u></a>{% endif %}
+    </small>
+{% endblock %}
+
+{% block content %}
+    <div class="addthis_native_toolbox body" style="padding-bottom:10px;"></div>
+
+    <!-- Top Ad -->
+    {% if ad_top %}
+        {{ ad_top.code|safe }}
+    {% endif %}
+
+    <div style="font-size:15px;line-height:25px;">{{ blog.content|safe }}</div>
+
+    <!-- Bottom Ad -->
+    {% if ad_bottom %}
+        {{ ad_bottom.code|safe }}
+    {% endif %}
+
+    <div>
+    {% if blog.tags.exists %}
+        <p><span class="fa fa-tags"></span> <strong>Tags:</strong> {% for tag in blog.tags.values %}<a href="{% url 'blog_tag_list_view' tag.slug %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+    {% endif %}
+    </div>
+
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'glucosetracker';
+
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+{% endblock %}
+
+{% block extrapanelsbefore %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title"><span class="fa fa-list-alt"></span> <strong>Recent Posts</strong></h3>
+        </div>
+        <div class="panel-body">
+            <ul>
+            {% for recent_blog in recent_blog_list %}
+                <li><a href="{% url 'blog_detail_view' recent_blog.slug %}">{{ recent_blog.title }}</a></li>
+            {% endfor %}
+            </ul>
+            <a href="{% url 'blog_list_view' %}">See all posts...</a>
+        </div>
+    </div>
+{% endblock %}

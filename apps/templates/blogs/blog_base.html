@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block rootcontainer %}
+<div class="container">
+    <div class="row">
+        {% block breadcrumbs %}{% endblock %}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="page-header">
+                        {% block heading %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    {% block content %}{% endblock %}
+                </div>
+                <div class="col-md-4">
+                    <!-- Mailing List Signup panel -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><span class="fa fa-envelope-o"></span> <strong>Sign Up to Our Mailing List</strong></h3>
+                        </div>
+                        <div class="panel-body">
+                            <em>Receive news, updates, and announcements.</em>
+                            <br><br>
+                            <form id="mailing-list-signup-form" class="form-horizontal" method="post">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <input type="email" name="email" class="form-control" id="input-email" placeholder="Your email address" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <button type="submit" class="btn btn-primary pull-right">Sign Me Up!</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- End Tags panel -->
+
+                    {% block extrapanelsbefore %}{% endblock %}
+
+                    <!-- Twitter widget -->
+                    <a class="twitter-timeline" data-dnt="true" href="https://twitter.com/glucosetracker"  data-widget-id="488451006829588480">Tweets by @glucosetracker</a>
+                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+                    <!-- End Twitter widget -->
+
+                    {% block extrapanelsafter %}{% endblock %}
+                </div>
+            </div>
+        </div>
+  </div>
+</div><!-- /.container -->
+{% endblock %}
+
+{% block extrajsexternal %}
+<!-- Go to www.addthis.com/dashboard to customize your tools -->
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid={{ addthis_publisher_id }}"></script>
+{% endblock %}
+
+{% block extrajs %}
+<script>
+var mailingListSignupForm = $('#mailing-list-signup-form');
+mailingListSignupForm.validate({
+    errorClass: "small text-danger",
+    submitHandler: function() {
+        $.ajax({
+            type: mailingListSignupForm.attr('method'),
+            url: "{% url 'mailing_list_signup_ajax_view' %}",
+            data: mailingListSignupForm.serialize(),
+            success: function (data, textStatus, xhr) {
+                alert("Thanks for signing up!");
+            },
+            error: function(data) {
+                alert('Sorry, something went wrong. Please try again.');
+            }
+        });
+        return false;
+    }
+});
+</script>
+{% endblock %}

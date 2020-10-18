@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+{% load humanize %}
+
+{% block extracss %}
+<link href="{% static 'bootstrap/css/carousel.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block customcss %}
+    <style>
+        body {margin-top: 40px;}
+    </style>
+{% endblock %}
+
+{% block rootcontainer %}
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron" style="background-color:#777; color:white">
+      <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <h1 class="text-center">Keep track of your blood glucose the easy way!</h1>
+                <p class="text-center">
+                    <b>GlucoseTracker</b> is a <b>simple</b> and <b>easy to use</b>
+                    web application for keeping track of your blood glucose levels.
+                    <br><br>
+                    It's <b>completely free</b> with no ads. Modern look and mobile friendly!
+                    <br><br>
+                    <b>{{ glucose_count|intcomma }}</b> Glucose Readings Logged
+                    <br><br>
+                    <a class="btn btn-lg btn-success" href="{% url 'signup' %}" role="button">
+                        Sign Up Today
+                    </a>
+                </p>
+                <br>
+            </div>
+            <div class="col-md-5">
+                <a href="{% static 'images/screenshots/glucosetracker_dashboard_001.png' %}" class="thumbnail">
+                    <img src="{% static 'images/screenshots/glucosetracker_dashboard_001.png' %}">
+                </a>
+                <div class="addthis_sharing_toolbox text-center"></div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Marketing messaging and featurettes
+    ================================================== -->
+    <!-- Wrap the rest of the page in another container to center all the content. -->
+
+    <div class="container marketing">
+
+      <!-- START THE FEATURETTES -->
+
+      <div class="row featurette">
+        <div class="col-md-5">
+            <a href="{% static 'images/screenshots/glucosetracker_charts_001.png' %}" class="thumbnail">
+                <img class="featurette-image img-responsive" src="{% static 'images/screenshots/glucosetracker_charts_001.png' %}">
+            </a>
+        </div>
+        <div class="col-md-7">
+          <h2 class="featurette-heading">Beautiful charts. <span class="text-muted">Visualize your data.</span></h2>
+          <p class="lead">Quickly see how you're doing by looking at the different graphs and charts made available
+          to you. Select values from the last 7, 14, 30, or 90 days.</p>
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <div class="row featurette">
+        <div class="col-md-7">
+          <h2 class="featurette-heading">Advanced data filtering. <span class="text-muted">Create your own report.</span></h2>
+          <p class="lead">You can filter your data by date, category, glucose range, tags, or even search your notes.
+            When you're done, you can then export the result to a CSV or PDF file, or just simply print it out.
+          </p>
+        </div>
+        <div class="col-md-5">
+            <a href="{% static 'images/screenshots/glucosetracker_filter_001.png' %}" class="thumbnail">
+                <img class="featurette-image img-responsive" src="{% static 'images/screenshots/glucosetracker_filter_001.png' %}">
+            </a>
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <div class="row featurette">
+        <div class="col-md-5">
+            <a href="{% static 'images/screenshots/glucosetracker_email_001.png' %}" class="thumbnail">
+                <img class="featurette-image img-responsive" src="{% static 'images/screenshots/glucosetracker_email_001.png' %}">
+            </a>
+        </div>
+        <div class="col-md-7">
+          <h2 class="featurette-heading">Email your data. <span class="text-muted">Send your data directly to your doctor.</span></h2>
+          <p class="lead">No more carrying log books when you visit your doctor! Send your data via email instead as a CSV or
+            PDF attachment. Just select the file format, date range, enter the email address, and hit Send.
+          </p>
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <div class="row featurette">
+        <div class="col-md-7">
+          <h2 class="featurette-heading">Supports CSV Import. <span class="text-muted">Import existing data in CSV format.</span></h2>
+          <p class="lead">Got existing data and too lazy to enter them manually? Most systems support exporting data in CSV
+              (comma-separated values) format.  Save time entering them manually as GlucoseTracker supports importing data from a
+              CSV file!
+          </p>
+        </div>
+        <div class="col-md-5">
+            <a href="{% static 'images/screenshots/glucosetracker_import_from_csv_001.png' %}" class="thumbnail">
+                <img class="featurette-image img-responsive" src="{% static 'images/screenshots/glucosetracker_import_from_csv_001.png' %}">
+            </a>
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <div class="row featurette">
+        <div class="col-md-5">
+            <a href="{% static 'images/screenshots/glucosetracker_dashboard_mobile_001.png' %}" class="thumbnail">
+                <img class="featurette-image img-responsive" src="{% static 'images/screenshots/glucosetracker_dashboard_mobile_001.png' %}">
+            </a>
+        </div>
+        <div class="col-md-7">
+          <h2 class="featurette-heading">Mobile friendly. <span class="text-muted">Layout adapts to screen size.</span></h2>
+          <p class="lead">Prefer using your tablet or smartphone? No problem! GlucoseTracker was designed with mobile devices
+            in mind. The website will automatically adjust based on the screen size so it will always be easy for you to use.
+          </p>
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <!-- /END THE FEATURETTES -->
+
+    </div><!-- /.container -->
+{% endblock %}
+
+{% block extrajs %}
+<script src="{% static 'bootstrap/js/holder.js' %}"></script>
+{% endblock %}
+
+{% block extrajsexternal %}
+    <!-- Go to www.addthis.com/dashboard to customize your tools -->
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid={{ addthis_publisher_id }}"></script>
+{% endblock %}

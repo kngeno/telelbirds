@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block extracss %}
+<link href="{% static 'datetimepicker/css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block heading %}
+<h3>
+    <span class="fa fa-envelope"></span> Email Report
+    <small>
+        <a href="{% url 'glucose_filter' %}">Filter Data</a>
+        | <a href="{% url 'glucose_charts' %}">Charts & Graphs</a>
+    </small>
+</h3>
+{% endblock %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container">
+   {% crispy form %}
+</div>
+{% endblock %}
+
+{% block extrajs %}
+<script type="text/javascript">
+$(function () {
+    $('#id_start_date').datetimepicker({
+        pickTime: false
+    });
+
+    $('#id_end_date').datetimepicker({
+        pickTime: false
+    });
+});
+</script>
+{% endblock %}
