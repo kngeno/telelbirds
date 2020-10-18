@@ -5,5 +5,5 @@
 .vagrant
 ansible/*.retry
 .env
-documentation.txt
+documentation.*
 
